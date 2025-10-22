@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junior Movie Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Junior Movie Finder</h1>
+
+    <div class="filters">
+        <label for="genre">Genre:</label>
+        <select id="genre">
+            <option value="Animation">Animation</option>
+            <option value="Family">Family</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Drama">Drama</option>
+            <option value="Comedy">Comedy</option>
+        </select>
+
+        <label for="language">Language:</label>
+        <input type="text" id="language" placeholder="e.g., English">
+
+        <label for="maxRuntime">Max Runtime:</label>
+        <select id="maxRuntime">
+            <option value="60">Up to 1 hour</option>
+            <option value="90">Up to 1.5 hours</option>
+            <option value="120" selected>Up to 2 hours</option>
+            <option value="150">Up to 2.5 hours</option>
+            <option value="180">Up to 3 hours</option>
+            <option value="9999">No limit</option>
+        </select>
+
+        <button id="filterBtn">Filter Movies</button>
+    </div>
+</header>
+
+<main id="movieList"></main>
+
+<script src="app.js"></script>
+</body>
+</html>
