@@ -23,8 +23,8 @@ const modalPlot = document.getElementById('modalPlot');
 
 // --- Challenge & Efficiency Constants ---
 
-// STRATEGY 1: Mix of broad and niche terms for volume
-const searchTerms = ['the','and','ing','scream','act','man'];
+// STRATEGY 1: NEW - Focused search terms for low-budget 80s/90s cinema
+const searchTerms = ['killer', 'mutant', 'revenge', 'zombie', 'space', 'blood', 'death', 'alien'];
 
 // STRATEGY 2: Increased pages to collect more IDs initially
 const MAX_PAGES_PER_TERM = 10;
@@ -33,20 +33,20 @@ const CACHE_KEY = 'challengeMovieCache';
 
 const MIN_YEAR = 1980;
 const MAX_YEAR = 1999;
-// STRATEGY 3: Relaxed rating requirement to capture more results
-const MAX_IMDB_RATING = 6.0;
+// STRATEGY 3: NEW - Lowered maximum IMDB rating to 5.0 to find worse movies
+const MAX_IMDB_RATING = 5.0;
 
 
 // --- Loading Messages (Omitted for brevity, use your existing list) ---
 const loadingMessages = [
-    "😬 Hold on! We're scraping the bottom of the cinematic barrel.",
-    "🎭 Patience. Finding the world's most wooden performances takes time.",
-    "🤯 Warning: We're analyzing 1,000 plots that make zero sense.",
-    "📼 Buffering the VHS tape... Be kind, rewind!",
-    "📉 Just verifying these films scored under a 5.0. It's a tough job.",
-    "🏆 Preparing your next movie challenge. Are you truly ready?",
-    "🍿 Searching for that perfect blend of bad acting and cheap effects...",
-    "🕰️ Dial-up noise engaged. Fetching 1980s cinema horrors now.",
+    "😬 HOLD ON! WE'RE SCRAPING THE BOTTOM OF THE CINEMATIC BARREL.",
+    "🎭 PATIENCE. FINDING THE WORLD'S MOST WOODEN PERFORMANCES TAKES TIME.",
+    "🤯 WARNING: WE'RE ANALYZING 1,000 PLOTS THAT MAKE ZERO SENSE.",
+    "📼 BUFFERING THE VHS TAPE... BE KIND, REWIND!",
+    "📉 JUST VERIFYING THESE FILMS SCORED UNDER A 5.0. IT'S A TOUGH JOB.",
+    "🏆 PREPARING YOUR NEXT MOVIE CHALLENGE. ARE YOU TRULY READY?",
+    "🍿 SEARCHING FOR THAT PERFECT BLEND OF BAD ACTING AND CHEAP EFFECTS...",
+    "🕰️ DIAL-UP NOISE ENGAGED. FETCHING 1980S CINEMA HORRORS NOW.",
 ];
 
 function getRandomLoadingMessage() {
@@ -141,7 +141,7 @@ async function fetchMovieDetails(imdbID) {
 
 /**
  * Action Step 4: Apply the Core Challenge Filters
- * Why: This function applies the specific criteria (1980-1999 AND IMDB rating <= 6.0)
+ * Why: This function applies the specific criteria (1980-1999 AND IMDB rating <= 5.0)
  * to the massive dataset collected from the API.
  * @param {Array<Object>} details - Array of full movie detail objects.
  * @returns {Array<Object>} Array of movies meeting the "worst movies" challenge criteria.
@@ -157,7 +157,7 @@ function processChallengeMovies(details) {
 
         const yearMatch = year >= MIN_YEAR && year <= MAX_YEAR;
 
-        // Check rating against the new 6.0 limit
+        // Check rating against the new 5.0 limit
         const isLowRated = !isNaN(rating) && rating <= MAX_IMDB_RATING;
 
         // Also include films with "N/A" or missing ratings (often bad films)
@@ -171,7 +171,7 @@ function processChallengeMovies(details) {
     console.log(`Movies that Hurt (80s/90s, Rating <= ${MAX_IMDB_RATING} OR Unrated): ${challengeMovies.length}`);
 
     if (challengeMovies.length === 0) {
-        movieList.innerHTML = '<p class="loading-message error">No movies meeting the base challenge criteria were found. Check your API key or wait for the daily request limit to reset.</p>';
+        movieList.innerHTML = '<p class="loading-message error">NO MOVIES MEETING THE BASE CHALLENGE CRITERIA WERE FOUND. CHECK YOUR API KEY OR TRY AGAIN.</p>';
         // Returns an empty JSON array
         return [];
     }
@@ -180,12 +180,17 @@ function processChallengeMovies(details) {
     return challengeMovies;
 }
 
-/**
- * Action Step 5: Master Data Loader (Handles Caching and API Calls)
- * Why: This function orchestrates the entire process and uses localStorage for caching.
- * Caching prevents hitting the OMDb API too many times for the same data.
- * @returns {Array<Object>} The final array of challenge movie objects.
- */
+// --- Action Step 5: Master Data Loader (Handles Caching and API Calls) ---
+// Why is this here? This bad boy is the *engine* of the whole app! It's our main data guy.
+// What does it do? It decides: 1) Should we quickly grab the movie list
+// from our **local storage cache** (super fast, no API hit!) or 2) Should we hit the OMDb API
+// for a fresh, long, expensive data pull? It then passes the final list off for filtering.
+// What's the connection? It's directly connected to the 'init()' function (for starting up the page)
+// and the 'filterBtn' click listener, so any time the movie data is needed, this function handles it.
+// What was tough? The biggest headache was making sure the **caching** works right.
+// We *have* to use caching to avoid burning through our API calls too fast! We also had to
+// make sure we check for corrupted cache data and always have a network fallback.
+// @returns {Array<Object>} The final array of challenge movie objects.
 async function loadMovies() {
     const message = getRandomLoadingMessage();
     movieList.innerHTML = `<p class="loading-message">${message}</p>`;
@@ -235,7 +240,7 @@ function displayMovies(movies) {
     movieList.innerHTML = '';
 
     if (movies.length === 0) {
-        movieList.innerHTML = '<p class="loading-message error">No movies match your current filters. Adjust your criteria!</p>';
+        movieList.innerHTML = '<p class="loading-message error">NO MOVIES MATCH YOUR CURRENT FILTERS. ADJUST YOUR CRITERIA!</p>';
         return;
     }
 
@@ -243,9 +248,18 @@ function displayMovies(movies) {
     movies.forEach(movie => {
         const div = document.createElement('div');
         div.className = 'movie';
+
+        // Action Step: Conditional rendering for the poster to show the chaotic placeholder
+        const posterHtml = (movie.Poster && movie.Poster !== "N/A")
+            ? `<img src="${movie.Poster}" alt="${movie.Title}" onerror="this.onerror=null;this.outerHTML='<div class=\\"poster-placeholder\\">IMAGE CORRUPTED: VIEWING IS DANGEROUS</div>'">`
+            : `<div class="poster-placeholder">
+                  POSTER NOT FOUND: GLITCH DETECTED
+                  <span class="placeholder-id">ID: ${movie.imdbID}</span>
+              </div>`;
+
         // Note: 'movie' is a JavaScript object derived from the JSON API response.
         div.innerHTML = `
-            <img src="${movie.Poster !== "N/A" ? movie.Poster : ""}" alt="${movie.Title}">
+            ${posterHtml}
             <h3>${movie.Title} (${movie.Year})</h3>
             <p>IMDB: <span class="rating-tag">${movie.imdbRating}</span> | MPAA: ${movie.Rated}</p>
             <p>Genre: ${movie.Genre}</p>
@@ -258,7 +272,16 @@ function displayMovies(movies) {
 function openModal(movie) {
     // Populate modal using keys from the movie object (derived from JSON)
     modalTitle.textContent = movie.Title;
-    modalPoster.src = movie.Poster !== "N/A" ? movie.Poster : "";
+
+    // Handle modal poster display/placeholder
+    const posterElement = document.getElementById('modalPoster');
+    if (movie.Poster && movie.Poster !== "N/A") {
+        posterElement.src = movie.Poster;
+        posterElement.style.display = 'block';
+    } else {
+        posterElement.style.display = 'none'; // Hide the image element if no poster
+    }
+
     modalGenre.textContent = "Genre: " + movie.Genre;
     modalLanguage.textContent = "Language: " + movie.Language;
     modalRuntime.textContent = "Runtime: " + movie.Runtime;
@@ -272,12 +295,12 @@ function openModal(movie) {
 
     const challengeLinksHTML = `
         <div class="challenge-links">
-            <p>Ready to Dare? Search for free viewing options:</p>
+            <p>READY TO DARE? SEARCH FOR FREE VIEWING OPTIONS:</p>
             <a href="${youtubeLink}" target="_blank" class="search-btn youtube-btn">
-                📺 YouTube Search
+                📺 YOUTUBE SEARCH
             </a>
             <a href="${googleLink}" target="_blank" class="search-btn google-btn">
-                🔍 Google Search
+                🔍 GOOGLE SEARCH
             </a>
         </div>
     `;
