@@ -3,42 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Junior Movie Finder</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Retro Movie Explorer 🍿</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
 <header>
-    <h1>Junior Movie Finder</h1>
-
-    <div class="filters">
-        <label for="genre">Genre:</label>
-        <select id="genre">
-            <option value="Animation">Animation</option>
-            <option value="Family">Family</option>
-            <option value="Adventure">Adventure</option>
-            <option value="Drama">Drama</option>
-            <option value="Comedy">Comedy</option>
-        </select>
-
-        <label for="language">Language:</label>
-        <input type="text" id="language" placeholder="e.g., English">
-
-        <label for="maxRuntime">Max Runtime:</label>
-        <select id="maxRuntime">
-            <option value="60">Up to 1 hour</option>
-            <option value="90">Up to 1.5 hours</option>
-            <option value="120" selected>Up to 2 hours</option>
-            <option value="150">Up to 2.5 hours</option>
-            <option value="180">Up to 3 hours</option>
-            <option value="9999">No limit</option>
-        </select>
-
-        <button id="filterBtn">Filter Movies</button>
-    </div>
+    <h1>🍿 Retro Movie Night Explorer 🎬</h1>
+    <p>A fun way to discover movies with friendly ratings!</p>
 </header>
 
-<main id="movieList"></main>
+<main>
+    <div class="controls-container">
+        <div class="filter-group">
+            <label for="genre">Filter by Genre:</label>
+            <input type="text" id="genre" placeholder="e.g., Action, Comedy">
+        </div>
+        <div class="filter-group">
+            <label for="language">Filter by Language:</label>
+            <input type="text" id="language" placeholder="e.g., English, Spanish">
+        </div>
+        <button id="filterBtn">Apply Filters</button>
+    </div>
 
-<script src="app.js"></script>
+    <hr>
+
+    <section id="movieList" class="movie-grid">
+        <p class="loading-message">Loading movie IDs... Please wait a moment for the data to process.</p>
+    </section>
+</main>
+
+<div id="movieModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button" id="closeModal">&times;</span>
+        <div class="modal-body">
+            <img id="modalPoster" src="" alt="Movie Poster">
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p id="modalRating" class="rating-tag"></p>
+                <p id="modalRuntime"></p>
+                <p id="modalGenre"></p>
+                <p id="modalLanguage"></p>
+                <hr>
+                <p id="modalPlot"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
