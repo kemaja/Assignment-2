@@ -1,0 +1,317 @@
+/* Custom Fonts from Google Fonts */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #1a1a1a; /* Dark background */
+    color: #f0f0f0; /* Light text */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: #333;
+    color: #ff00ff; /* Neon Pink/Magenta */
+    padding: 20px;
+    text-align: center;
+    border-bottom: 5px solid #00ffff; /* Neon Cyan accent line */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+header h1 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 3.5em;
+    letter-spacing: 5px;
+    margin: 0;
+    text-shadow: 0 0 10px #ff00ff; /* Glow effect */
+}
+
+header p {
+    margin-top: 5px;
+    font-size: 1.1em;
+    color: #ccc;
+}
+
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+/* --- Controls and Filters Layout --- */
+
+.controls-container {
+    /* Use a 3-column grid for the controls, and let the button/topic span */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    align-items: flex-end;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #252525;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); /* Cyan glow */
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #00ffff; /* Neon Cyan */
+}
+
+input[type="text"],
+select {
+    padding: 10px;
+    border: 2px solid #555;
+    border-radius: 5px;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    transition: border-color 0.3s;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23f0f0f0%22%20d%3D%22M287%20197.35l-137.9%2091.2c-1.3%200.9-3.1%200.9-4.4%200L5.4%20197.35c-2.4-1.6-3.1-4.8-1.5-7.2s4.8-3.1%207.2-1.5l133.7%2088.35c0.4%200.3%201%200.3%201.4%200l133.7-88.35c2.4-1.6%205.6-0.9%207.2%201.5s0.9%204.8-1.5%207.2z%22%2F%3E%3Cpath%20fill%3D%22%23f0f0f0%22%20d%3D%22M5.4%2095.05l137.9-91.2c1.3-0.9%203.1-0.9%204.4%200l137.9%2091.2c2.4%201.6%203.1%204.8%201.5%207.2s-4.8%203.1-7.2%201.5l-133.7-88.35c-0.4-0.3-1-0.3-1.4%200l-133.7%2088.35c-2.4%201.6-5.6%200.9-7.2-1.5s-0.9-4.8%201.5-7.2z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 0.65em auto;
+}
+
+input[type="text"]:focus, select:focus {
+    border-color: #ff00ff; /* Neon Pink focus */
+    outline: none;
+}
+
+/* Topic input and button span the full width of the grid */
+.full-width-group, #filterBtn {
+    grid-column: span 3;
+}
+
+#filterBtn {
+    background-color: #ff00ff; /* Neon Pink button */
+    color: #1a1a1a;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: 3px 3px 0 #00ffff;
+    height: 40px;
+}
+
+#filterBtn:hover {
+    background-color: #ff33ff;
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments for the filter bar */
+@media (max-width: 900px) {
+    .controls-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+    }
+    /* Language and Rating take up 1/2, Topic and Button take up full width */
+    .full-width-group, #filterBtn {
+        grid-column: 1 / -1;
+    }
+}
+@media (max-width: 600px) {
+    .controls-container {
+        grid-template-columns: 1fr; /* Single column on small screens */
+    }
+    .full-width-group, #filterBtn {
+        grid-column: 1;
+    }
+}
+
+
+/* --- Movie Grid and Cards (Styles remain the same) --- */
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.movie {
+    background-color: #252525;
+    border: 1px solid #444;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 15px;
+    box-shadow: 0 0 5px rgba(255, 0, 255, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.movie:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+}
+
+.movie img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 3px solid #ff00ff;
+}
+
+.movie h3 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.5em;
+    margin: 10px 0 5px;
+    color: #00ffff;
+}
+
+.movie p {
+    margin: 3px 10px;
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+/* --- Modal Styles (Styles remain the same) --- */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.85);
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 900px;
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+    position: relative;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 5%; opacity: 1}
+}
+
+.close-button {
+    color: #00ffff;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #ff00ff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    gap: 30px;
+    text-align: left;
+}
+
+.modal-body img {
+    width: 300px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.modal-info h2 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 3em;
+    margin-top: 0;
+    color: #ff00ff;
+}
+
+.rating-tag {
+    display: inline-block;
+    background-color: #00ffff;
+    color: #1a1a1a;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.loading-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.2em;
+    color: #777;
+    padding: 40px;
+}
+
+.loading-message.error {
+    color: #ff00ff;
+}
+
+/* --- Streaming Search Links (Styles remain the same) --- */
+
+.challenge-links {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed #444;
+}
+
+.challenge-links p {
+    font-size: 1.1em;
+    color: #ff00ff;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.search-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-right: 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.2s, color 0.2s;
+    box-shadow: 2px 2px 0 #333;
+}
+
+.youtube-btn {
+    background-color: #ff0000;
+    color: #fff;
+    border: 2px solid #ff0000;
+}
+
+.youtube-btn:hover {
+    background-color: #e50000;
+}
+
+.google-btn {
+    background-color: #4285f4;
+    color: #fff;
+    border: 2px solid #4285f4;
+}
+
+.google-btn:hover {
+    background-color: #3377e3;
+}
